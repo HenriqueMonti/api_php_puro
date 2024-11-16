@@ -2,7 +2,7 @@
 
 require 'crudOperations/medicoCrud.php';
 require 'crudOperations/pacienteCrud.php';
-require 'crudperations/consultaCrud.php';
+require 'crudOperations/consultaCrud.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -24,7 +24,7 @@ if ($uri[1] !== 'api' || !isset($uri[2])) {
 if ($uri[2] === 'pacientes' && $_SERVER['REQUEST_METHOD'] === 'GET') {
 
   if ($uri[3]) {
-    getEspecialidadeById($uri[3]);
+    getPacienteById($uri[3]);
   } else {
     getAllPacientes();
   }
@@ -52,6 +52,9 @@ if ($uri[2] === 'pacientes' && $_SERVER['REQUEST_METHOD'] === 'GET') {
 
     getEspecialidades();
   }
+} elseif ($uri[2] === 'medicos' && $uri[3] === 'especialidade' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $input = json_decode(file_get_contents('php://input'), true);
+  createEspecialidade($input);
 } elseif ($uri[2] === 'medicos' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $input = json_decode(file_get_contents('php://input'), true);

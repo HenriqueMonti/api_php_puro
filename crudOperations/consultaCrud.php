@@ -1,6 +1,4 @@
 <?php
-require 'db.php';
-
 
 function getAllConsultas()
 {
@@ -53,21 +51,32 @@ function createConsulta($data)
     return;
   }
 
-  $dataDaConsulta = new DateTime($data['data']);
+  $dataDaConsulta = new DateTime($data['data'], new DateTimeZone('America/Cuiaba'));
   $diferenca = $dataDaConsulta->diff(new DateTime());
 
-  if ($diferenca->h < 2) {
+  $horas = $dataDaConsulta->format('H');
+  if ($horas > 18) {
+    echo "Nao eh possivel marcar a consulta para um horario alem das 18";
+    return;
+  }
+
+  if($horas <= 7) {
+    echo "Nao eh possivel marcar a consulta para um horario antes das 7 horas";
+    return;
+  }
+
+  if ($diferenca->h < 1) {
     echo "Eh preciso Marcar a consulta com antecedencia";
     return;
   }
 
-  if ($diferenca->days > 2) {
-    echo "Nao eh possivel marcar a consulta com mais de um dia de antecedencia";
+  if(new DateTime('now') > $dataDaConsulta){
+    echo "N eh possivel marcar a consulta no passado";
     return;
   }
-  $horas = $dataDaConsulta->format('H');
-  if ($horas > 18) {
-    echo "Nao eh possivel marcar a consulta para um horario alem das 18";
+  
+  if ($diferenca->days > 2) {
+    echo "Nao eh possivel marcar a consulta com mais de um dia de antecedencia";
     return;
   }
 
@@ -124,10 +133,15 @@ function updateConsulta($data, $id)
     return;
   }
 
+  if(!$id){
+    echo "Eh preciso passar o id";
+    return;
+  }
+
   $dataDaConsulta = new DateTime($data['data']);
   $diferenca = $dataDaConsulta->diff(new DateTime());
 
-  if ($diferenca->h < 2) {
+  if ($diferenca->h < 1) {
     echo "Eh preciso atualizar a consulta com antecedencia";
     return;
   }

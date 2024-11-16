@@ -1,6 +1,4 @@
 <?php
-require 'db.php';
-
 
 function getAllPacientes()
 {

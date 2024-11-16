@@ -1,6 +1,6 @@
 <?php
 
-require 'db.php';
+require_once 'db.php';
 
 function getAllMedicos()
 {
@@ -159,6 +159,30 @@ function updateMedico($data, $id)
       echo json_encode(['message' => 'Medico atualizado']);
     } else {
       echo json_encode(['message' => 'Erro ao atualizar medico']);
+    }
+  } catch (PDOException $e) {
+    echo "Erro na consulta" . $e->getMessage();
+  }
+}
+
+function createEspecialidade($data)
+{
+  $pdo = getConnection();
+
+  if (!$data['nome']) {
+    echo "Eh preciso passar o nome do medico";
+    return;
+  }
+
+  try {
+    $sql = "INSERT INTO especialidade(name) values(:nome)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':nome', $data['nome']);
+
+    if ($stmt->execute()) {
+      echo json_encode(['message' => 'Consulta criada']);
+    } else {
+      echo json_encode(['message' => 'Erro ao criar consulta']);
     }
   } catch (PDOException $e) {
     echo "Erro na consulta" . $e->getMessage();
