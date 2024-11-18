@@ -4,9 +4,9 @@ function getConnection()
 {
 
   $host = '127.0.0.1';
-  $dbname = 'test_database';
-  $username = 'user';
-  $password = 'passsword';
+  $dbname = 'dbTeste';
+  $username = 'root';
+  $password = 'root';
 
   try {
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
